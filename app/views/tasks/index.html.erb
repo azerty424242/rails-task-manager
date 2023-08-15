@@ -1,0 +1,101 @@
+<%# Creating a view to display the tasks %>
+
+
+<%# TODO: Finish to implement the completed? checkbox %>
+
+
+<div class="container mt-5">
+  <h1 class="mb-3">All Tasks V1</h1>
+
+  <ul>
+    <% @tasks.each do |task| %>
+      <li class="mb-2">
+        <%= link_to task.title, task_path(task) %> - <%= task.completed ? '(Completed)' : '' %>
+        <%= link_to 'Delete', '#', class: "btn btn-danger btn-sm delete-task-button", data: { task_id: task.id } %>
+        <%= form_with(url: task_path(task), method: :delete, id: "delete-task-form-#{task.id}", style: "display: none;") do |form| %>
+          <%= form.submit 'Yes, Delete', style: "display: none;" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= link_to 'Create a New Task', new_task_path, class: "btn btn-primary mb-3" %>
+</div>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const deleteButtons = document.querySelectorAll(".delete-task-button");
+
+    deleteButtons.forEach(button => {
+      const taskId = button.dataset.task_id;
+      const deleteForm = document.getElementById(`delete-task-form-${taskId}`);
+
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const deleteConfirm = confirm("Are you sure you want to delete this task?");
+        if (deleteConfirm) {
+          deleteForm.submit();
+        }
+      });
+    });
+  });
+</script>
+
+
+
+
+
+<%# Display: none %>
+<div style="display: none;">
+  <div class="container mt-5">
+    <h1>All Tasks V2</h1>
+
+    <ul>
+      <% @tasks.each do |task| %>
+        <li>
+          <div class="form-check">
+            <%= link_to task_path(task) do %>
+              <%= check_box_tag "task_ids[]", task.id, task.completed, class: "form-check-input" %>
+              <label class="form-check-label"><%= task.title %></label>
+            <% end %>
+            <%= link_to 'Delete', task_path(task), method: :delete, data: { confirm: 'Are you sure you want to delete this task?' }, class: "btn btn-danger btn-sm" %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+
+    <%= link_to 'Create a New Task', new_task_path, class: "btn btn-primary mb-3" %>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<%#-----------------  CHECK / UNCHECK ON THE V2 ---------------------
+
+
+//////////  Add a javascript file (verify if it works)  /////////////
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const checkboxes = document.querySelectorAll(".form-check-input");
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("click", (event) => {
+      event.preventDefault();
+      const taskId = event.target.getAttribute("data-task-id");
+
+      // Now that we have the taskId, we can mark the task as completed using an Ajax call.
+      console.log("Task ID:", taskId, "is checked:", event.target.checked);
+    });
+  });
+});
+
+----------------------------------------------------------------------%>

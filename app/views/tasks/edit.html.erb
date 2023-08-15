@@ -1,0 +1,28 @@
+
+
+
+<div class="container mt-5">
+  <h1>Edit Task</h1>
+
+  <%= form_with model: @task, url: task_path(@task), method: :patch do |form| %>
+    <div class="mb-3">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :details %>
+      <%= form.text_area :details, class: "form-control" %>
+    </div>
+
+    <div class="form-check mb-3">
+      <%= form.label :completed, class: "form-check-label" do %>
+        <%= form.check_box :completed, class: "form-check-input" %>
+        Mark as Completed
+      <% end %>
+    </div>
+
+    <%= form.submit "Save Changes", class: "btn btn-primary" %>
+    <%= link_to "Cancel", task_path(@task), class: "btn btn-secondary" %>
+  <% end %>
+</div>
